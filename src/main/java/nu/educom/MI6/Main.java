@@ -54,6 +54,9 @@ public class Main {
   }
   protected static String checkServiceNumber(String serviceNumber) {
     try{
+      if (serviceNumber.contains("-") || serviceNumber.equals("000")) {
+        throw new Exception("Input is incorrect.");
+      }
       if (!isNumeric(serviceNumber)) {
         throw new Exception("Input is incorrect.");
       }
