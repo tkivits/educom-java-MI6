@@ -1,26 +1,33 @@
 package nu.educom.MI6;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Scanner;
 
 public class Main {
+
+  private static List<String> isLoggedOn = new ArrayList<>();
+  private static List<String> isBlacklisted = new ArrayList<>();
   public static void main(String[] args) {
+    boolean loop = true;
     Scanner input = new Scanner(System.in);
-    System.out.println("Please input your service number:");
 
-    String serviceNumber = input.nextLine();
-    String result = checkServiceNumber(serviceNumber);
+    while(loop) {
 
-    if(result != null) {
-      System.out.println("Welcome agent " + result);
-      System.out.println("Please enter our super secret password:");
+      System.out.println("Please input your service number:");
+      String serviceNumber = input.nextLine();
 
-      String password = input.nextLine();
-      boolean pwResult = checkPassword(password);
-      if(pwResult) {
-        System.out.println("You entered the correct password");
+      if(isLoggedOn.contains(serviceNumber)) {
+        System.out.println("You are already logged on.");
       } else {
-        System.out.println("You are now blacklisted!");
+        checkServiceNumber(serviceNumber);
       }
+
     }
+
+    System.out.println("Please enter our super secret password:");
+
+    String password = input.nextLine();
+    checkPassword(password);
     }
   protected static boolean isNumeric(String num) {
     if(num == null) {
@@ -36,7 +43,7 @@ public class Main {
   protected static String leftPadWithZeros(String str) {
     return String.format("%0"+ (3 - str.length() )+"d%s",0 ,str);
   }
-  protected static String checkServiceNumber(String serviceNumber) {
+  public static void checkServiceNumber(String serviceNumber) {
     if(serviceNumber.length() < 3) {
       serviceNumber = leftPadWithZeros(serviceNumber);
     }
@@ -50,10 +57,14 @@ public class Main {
     } catch (Exception e) {
       System.out.println("Input is incorrect.");
     }
-    return serviceNumber;
+    isLoggedOn.add(serviceNumber);
   }
-  protected static boolean checkPassword(String password) {
+  protected static void checkPassword(String password) {
     String actualPassword = "For ThE Royal QUEEN";
-    return actualPassword.equals(password);
+    if(actualPassword.equals(password)) {
+      System.out.println("You entered the correct password");
+    } else {
+      System.out.println("You are now blacklisted!");
+    }
   }
 }
