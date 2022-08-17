@@ -41,6 +41,9 @@ public class Main {
     }
     try {
       int i = Integer.parseInt(num);
+      if (i > 956) {
+        return false;
+      }
     } catch (NumberFormatException e) {
       return false;
     }
