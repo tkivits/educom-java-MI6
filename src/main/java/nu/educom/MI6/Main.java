@@ -12,9 +12,17 @@ public class Main {
     if(result != null) {
       System.out.println("Welcome agent " + result);
       System.out.println("Please enter our super secret password:");
+
+      String password = input.nextLine();
+      boolean pwResult = checkPassword(password);
+      if(pwResult) {
+        System.out.println("You entered the correct password");
+      } else {
+        System.out.println("You are now blacklisted!");
+      }
     }
     }
-  public static boolean isNumeric(String num) {
+  protected static boolean isNumeric(String num) {
     if(num == null) {
       return false;
     }
@@ -25,10 +33,10 @@ public class Main {
     }
     return true;
   }
-  public static String leftPadWithZeros(String str) {
+  protected static String leftPadWithZeros(String str) {
     return String.format("%0"+ (3 - str.length() )+"d%s",0 ,str);
   }
-  public static String checkServiceNumber(String serviceNumber) {
+  protected static String checkServiceNumber(String serviceNumber) {
     if(serviceNumber.length() < 3) {
       serviceNumber = leftPadWithZeros(serviceNumber);
     }
@@ -43,5 +51,9 @@ public class Main {
       System.out.println("Input is incorrect.");
     }
     return serviceNumber;
+  }
+  protected static boolean checkPassword(String password) {
+    String actualPassword = "For ThE Royal QUEEN";
+    return actualPassword.equals(password);
   }
 }
