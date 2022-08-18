@@ -31,14 +31,14 @@ public class Main {
       if (!Utility.isInRange(serviceNumber, 1, 956)) {
         valid = false;
       }
+      if (!Model.checkServiceNumber(serviceNumber)) {
+        valid = false;
+      }
       if (isBlacklisted.contains(serviceNumber)) {
         valid = false;
       }
       if (isLoggedOn.contains(serviceNumber)) {
         JOptionPane.showMessageDialog(jFrame, "You are already logged in, agent:" + serviceNumber);
-      }
-      if (!Model.checkServiceNumber(serviceNumber)) {
-        valid = false;
       }
       if (!valid) {
         JOptionPane.showMessageDialog(jFrame, "ACCESS DENIED", "!!!", JOptionPane.ERROR_MESSAGE);
