@@ -1,7 +1,9 @@
 package nu.educom.MI6;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
+import javax.swing.*;
 
 public class Main {
 
@@ -9,6 +11,7 @@ public class Main {
   private static List<String> isBlacklisted = new ArrayList<>();
   public static void main(String[] args) {
     boolean loop = true;
+    JFrame accessFrame = new JFrame();
     Scanner input = new Scanner(System.in);
 
     while(loop) {
@@ -20,8 +23,7 @@ public class Main {
       }
 
       if(isBlacklisted.contains(serviceNumber)) {
-        System.out.println("ERROR: You are blacklisted!");
-        System.out.println(" ");
+        JOptionPane.showMessageDialog(accessFrame, "ACCESS DENIED");
       } else if(isLoggedOn.contains(serviceNumber)) {
           System.out.println("You are already logged on.");
           System.out.println(" ");
@@ -30,7 +32,13 @@ public class Main {
           if(serviceNumber != null) {
             System.out.println("Please enter our super secret password:");
             String password = input.nextLine();
-            checkPassword(password, serviceNumber);
+            if(checkPassword(password, serviceNumber)) {
+              JOptionPane.showMessageDialog(accessFrame, "WELCOME AGENT: " + serviceNumber);
+            } else {
+              JOptionPane.showMessageDialog(accessFrame, "ACCESS DENIED");
+            }
+          } else {
+            JOptionPane.showMessageDialog(accessFrame, "ACCESS DENIED");
           }
         }
       }
@@ -55,31 +63,26 @@ public class Main {
   protected static String checkServiceNumber(String serviceNumber) {
     try{
       if (serviceNumber.contains("-") || serviceNumber.equals("000")) {
-        throw new Exception("Input is incorrect.");
+        throw new Exception("ACCESS DENIED");
       }
       if (!isNumeric(serviceNumber)) {
-        throw new Exception("Input is incorrect.");
+        throw new Exception("ACCESS DENIED");
       }
       if (serviceNumber.length() > 3) {
-        throw new Exception("Input is incorrect.");
+        throw new Exception("ACCESS DENIED");
       }
     } catch (Exception e) {
-      System.out.println("Input is incorrect.");
-      System.out.println(" ");
       return null;
     }
     return serviceNumber;
   }
-  protected static void checkPassword(String password, String serviceNumber) {
+  protected static boolean checkPassword(String password, String serviceNumber) {
     String actualPassword = "For ThE Royal QUEEN";
     if(actualPassword.equals(password)) {
-      isLoggedOn.add(serviceNumber);
-      System.out.println("You are now logged on, agent " + serviceNumber);
-      System.out.println(" ");
+      return true;
     } else {
       isBlacklisted.add(serviceNumber);
-      System.out.println("You are now blacklisted!");
-      System.out.println(" ");
+      return false;
     }
   }
 }
