@@ -25,12 +25,6 @@ public class Main {
       if (serviceNumber.length() < 3) {
         serviceNumber = Utility.leftPadWithZeros(serviceNumber);
       }
-      if (!Utility.isNumeric(serviceNumber)) {
-        valid = false;
-      }
-      if (!Utility.isInRange(serviceNumber, 1, 956)) {
-        valid = false;
-      }
       if (!Model.checkServiceNumber(serviceNumber)) {
         valid = false;
       }

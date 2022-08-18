@@ -2,6 +2,12 @@ package nu.educom.MI6;
 
 public class Model {
     protected static boolean checkServiceNumber(String serviceNumber) {
+        if (!Utility.isNumeric(serviceNumber)) {
+            return false;
+        }
+        if (!Utility.isInRange(serviceNumber, 1, 956)) {
+            return false;
+        }
         try{
             if (serviceNumber.contains("-")) {
                 throw new Exception("ACCESS DENIED");
