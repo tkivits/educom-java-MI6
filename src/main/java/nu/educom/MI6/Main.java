@@ -11,7 +11,7 @@ public class Main {
   private static List<String> isBlacklisted = new ArrayList<>();
 
   public static void main(String[] args) {
-    JFrame accessFrame = new JFrame();
+    JFrame jFrame = new JFrame();
     Scanner input = new Scanner(System.in);
 
     boolean loop = true;
@@ -35,13 +35,13 @@ public class Main {
         valid = false;
       }
       if (isLoggedOn.contains(serviceNumber)) {
-        JOptionPane.showMessageDialog(accessFrame, "You are already logged in, agent:" + serviceNumber);
+        JOptionPane.showMessageDialog(jFrame, "You are already logged in, agent:" + serviceNumber);
       }
       if (!Model.checkServiceNumber(serviceNumber)) {
         valid = false;
       }
       if (!valid) {
-        JOptionPane.showMessageDialog(accessFrame, "ACCESS DENIED");
+        JOptionPane.showMessageDialog(jFrame, "ACCESS DENIED", "!!!", JOptionPane.ERROR_MESSAGE);
         continue;
       }
 
@@ -52,10 +52,10 @@ public class Main {
         valid = false;
       }
       if(!valid) {
-        JOptionPane.showMessageDialog(accessFrame, "ACCESS DENIED");
+        JOptionPane.showMessageDialog(jFrame, "ACCESS DENIED", "!!!", JOptionPane.ERROR_MESSAGE);
         isBlacklisted.add(serviceNumber);
       } else {
-        JOptionPane.showMessageDialog(accessFrame, "WELCOME AGENT: " + serviceNumber);
+        JOptionPane.showMessageDialog(jFrame, "WELCOME AGENT: " + serviceNumber);
         isLoggedOn.add(serviceNumber);
       }
     }
