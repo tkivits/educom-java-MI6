@@ -34,6 +34,7 @@ public class Main {
           String serviceNumber = tfs.getText();
           String password = tfp.getText();
           boolean valid = true;
+          boolean validTwo = true;
 
           if (serviceNumber.length() < 3) {
             serviceNumber = Utility.leftPadWithZeros(serviceNumber);
@@ -46,20 +47,27 @@ public class Main {
           }
           if (valid && isLoggedOn.contains(serviceNumber)) {
             label.setText("You are already logged in, agent:" + serviceNumber);
-          }
-          if (!Model.checkPassword(password)) {
             valid = false;
           }
-          if(!valid) {
+          if(valid) {
+            if (!Model.checkPassword(password)) {
+              validTwo = false;
+            }
+            if(!validTwo) {
+              label.setText("ACCESS DENIED");
+              tfs.setText("");
+              tfp.setText("");
+              isBlacklisted.add(serviceNumber);
+            } else {
+              label.setText("WELCOME AGENT: " + serviceNumber);
+              tfs.setText("");
+              tfp.setText("");
+              isLoggedOn.add(serviceNumber);
+            }
+          } else {
             label.setText("ACCESS DENIED");
             tfs.setText("");
             tfp.setText("");
-            isBlacklisted.add(serviceNumber);
-          } else {
-            label.setText("WELCOME AGENT: " + serviceNumber);
-            tfs.setText("");
-            tfp.setText("");
-            isLoggedOn.add(serviceNumber);
           }
         }
       }
