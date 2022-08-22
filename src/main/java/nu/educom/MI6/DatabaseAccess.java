@@ -5,6 +5,7 @@ import java.sql.DriverManager;
 import java.sql.SQLException;
 
 public class DatabaseAccess {
+    Connection conn = initiateConnection();
 
     public Connection initiateConnection() {
         Connection conn = null;
@@ -14,10 +15,8 @@ public class DatabaseAccess {
             String user      = "MI6User";
             String password  = "vmCyOY(0LnYN_K3-";
 
-            // create a connection to the database
             conn = DriverManager.getConnection(url, user, password);
-            // more processing here
-            // ...
+
         } catch(SQLException e) {
             System.out.println(e.getMessage());
         } finally {
