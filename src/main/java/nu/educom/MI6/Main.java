@@ -41,10 +41,10 @@ public class Main {
           if (!Model.checkServiceNumber(serviceNumber)) {
             valid = false;
           }
-          if (isBlacklisted.contains(serviceNumber)) {
+          if (valid && isBlacklisted.contains(serviceNumber)) {
             valid = false;
           }
-          if (isLoggedOn.contains(serviceNumber)) {
+          if (valid && isLoggedOn.contains(serviceNumber)) {
             label.setText("You are already logged in, agent:" + serviceNumber);
           }
           if (!Model.checkPassword(password)) {
