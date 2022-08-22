@@ -16,9 +16,6 @@ public class Utility {
         return true;
     }
     protected static boolean isInRange(String num, int min, int max) {
-        if(num == null) {
-            return false;
-        }
         try {
             int i = Integer.parseInt(num);
             if (max < i || i < min) {
