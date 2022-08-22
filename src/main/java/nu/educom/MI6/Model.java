@@ -8,14 +8,10 @@ public class Model {
         if (!Utility.isInRange(serviceNumber, 1, 956)) {
             return false;
         }
-        try{
-            if (serviceNumber.contains("-")) {
-                throw new Exception("ACCESS DENIED");
-            }
-            if (serviceNumber.length() > 3) {
-                throw new Exception("ACCESS DENIED");
-            }
-        } catch (Exception e) {
+        if (serviceNumber.contains("+")) {
+            return false;
+        }
+        if (serviceNumber.length() > 3) {
             return false;
         }
         return true;
