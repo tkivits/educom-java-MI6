@@ -1,12 +1,10 @@
 package nu.educom.MI6;
 
+import nu.educom.MI6.LoginAttempt;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -61,8 +59,10 @@ public class Main {
             }
             if(!validTwo) {
               label.setText("ACCESS DENIED");
+              labelTwo.setText("");
               tfs.setText("");
               tfp.setText("");
+              LoginAttempt.insertLoginAttempt(serviceNumber, 0);
               isBlacklisted.add(serviceNumber);
             } else {
               label.setText("WELCOME AGENT: " + serviceNumber);
@@ -72,9 +72,7 @@ public class Main {
               } else {
                 labelTwo.setText("You do not have a license to kill");
               }
-              label.setText("WELCOME AGENT: " + serviceNumber);
-              tfs.setText("");
-              tfp.setText("");
+              LoginAttempt.insertLoginAttempt(serviceNumber, 1);
               isLoggedOn.add(serviceNumber);
             }
           } else {
@@ -89,7 +87,7 @@ public class Main {
 
   public static void main(String[] args) {
 
-      showFrame();
+    showFrame();
 
   }
 }
