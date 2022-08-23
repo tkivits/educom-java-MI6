@@ -4,10 +4,8 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 
-public class DatabaseAccess {
-    Connection conn = initiateConnection();
-
-    public Connection initiateConnection() {
+public class Connector {
+    public static Connection createConn() {
         Connection conn = null;
         try {
             // db parameters
@@ -27,5 +25,6 @@ public class DatabaseAccess {
                 System.out.println(ex.getMessage());
             }
         }
+        return conn;
     }
 }

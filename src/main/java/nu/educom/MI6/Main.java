@@ -1,10 +1,10 @@
 package nu.educom.MI6;
 
+import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
 import java.util.ArrayList;
 import java.util.List;
-import javax.swing.*;
 
 public class Main {
   private static JFrame frame = new JFrame("MI6");
