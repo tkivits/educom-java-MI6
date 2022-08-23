@@ -3,6 +3,10 @@ package nu.educom.MI6;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -37,9 +41,9 @@ public class Main {
           boolean validTwo = true;
 
           if (serviceNumber.length() < 3) {
-            serviceNumber = Utility.leftPadWithZeros(serviceNumber);
+            serviceNumber = nu.educom.MI6.Utility.leftPadWithZeros(serviceNumber);
           }
-          if (!Model.checkServiceNumber(serviceNumber)) {
+          if (!nu.educom.MI6.Model.checkServiceNumber(serviceNumber)) {
             valid = false;
           }
           if (valid && isBlacklisted.contains(serviceNumber)) {
@@ -50,7 +54,7 @@ public class Main {
             valid = false;
           }
           if(valid) {
-            if (!Model.checkPassword(password)) {
+            if (!nu.educom.MI6.Model.checkPassword(password, serviceNumber)) {
               validTwo = false;
             }
             if(!validTwo) {
