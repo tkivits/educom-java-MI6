@@ -13,6 +13,7 @@ import java.util.List;
 public class Main {
   private static JFrame frame = new JFrame("MI6");
   private static JLabel label = new JLabel("Please input your service number:", JLabel.CENTER);
+  private static JLabel labelTwo = new JLabel("", JLabel.CENTER);
   private static JTextField tfs = new JTextField();
   private static JTextField tfp = new JTextField();
   private static JButton submitButton = new JButton("Submit");
@@ -22,8 +23,9 @@ public class Main {
   public static void showFrame() {
     tfs.setHorizontalAlignment(SwingConstants.CENTER);
     tfp.setHorizontalAlignment(SwingConstants.CENTER);
-    frame.setLayout(new GridLayout(4, 1));
+    frame.setLayout(new GridLayout(5, 1));
     frame.add(label);
+    frame.add(labelTwo);
     frame.add(tfs);
     frame.add(tfp);
     frame.add(submitButton);
@@ -63,6 +65,13 @@ public class Main {
               tfp.setText("");
               isBlacklisted.add(serviceNumber);
             } else {
+              label.setText("WELCOME AGENT: " + serviceNumber);
+              boolean hasLicense = nu.educom.MI6.Agent.getLicenseToKill(serviceNumber);
+              if(hasLicense) {
+                labelTwo.setText("You have a license to kill.");
+              } else {
+                labelTwo.setText("You do not have a license to kill");
+              }
               label.setText("WELCOME AGENT: " + serviceNumber);
               tfs.setText("");
               tfp.setText("");
