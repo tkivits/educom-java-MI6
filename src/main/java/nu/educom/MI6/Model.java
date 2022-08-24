@@ -2,6 +2,9 @@ package nu.educom.MI6;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Timestamp;
+import java.time.LocalDateTime;
+import java.util.*;
 
 public class Model {
     protected static boolean checkServiceNumber(String serviceNumber) {
@@ -20,6 +23,7 @@ public class Model {
         }
         return valid;
     }
+
     protected static boolean checkPassword(String password, String serviceNumber) {
 
         String actualPassword = null;
@@ -42,4 +46,20 @@ public class Model {
         }
     }
 
+    protected LocalDateTime getLockoutTime(String serviceNumber) {
+        List<nu.educom.MI6.LoginAttempt> loginAttempts = nu.educom.MI6.LoginAttempt.getLoginAttempts(serviceNumber);
+
+        int countAttempts = loginAttempts.size();
+        if (countAttempts == 0) {
+            return null;
+        }
+
+        int amount = (int) Math.pow(2.0, countAttempts - 1.0);
+        nu.educom.MI6.LoginAttempt lastAttempt = loginAttempts.get(countAttempts - 1);
+        LocalDateTime lockoutTime = lastAttempt.getDateTime().toLocalDateTime().plusMinutes(amount);
+        if (lockoutTime.isAfter(LocalDateTime.now())) {
+            return lockoutTime;
+        }
+        return null;
+    }
 }

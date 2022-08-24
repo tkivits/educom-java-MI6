@@ -18,6 +18,10 @@ public class LoginAttempt {
         this.success = success;
     }
 
+    public Timestamp getDateTime() {
+        return dateTime;
+    }
+
     public static void insertLoginAttempt(String serviceNumber, int success) {
         long now = System.currentTimeMillis();
         Timestamp dateTime = new Timestamp(now);
@@ -34,14 +38,14 @@ public class LoginAttempt {
         }
     }
 
-    public static List<LoginAttempt> getLoginAttempts(int serviceNumber) {
+    public static List<LoginAttempt> getLoginAttempts(String serviceNumber) {
         List<LoginAttempt> loginAttempts = new ArrayList<>();
 
         try {
             Connection conn = nu.educom.MI6.Connector.createConn();
             PreparedStatement stmt = conn.prepareStatement("SELECT * FROM login_attempts WHERE service_num = ? AND ID > IFNULL((SELECT MAX(id) FROM login_attempts WHERE success = 1 AND service_num = ?), 0)");
-            stmt.setInt(1, serviceNumber);
-            stmt.setInt(2, serviceNumber);
+            stmt.setString(1, serviceNumber);
+            stmt.setString(2, serviceNumber);
             ResultSet rs = stmt.executeQuery();
             while (rs.next()) {
                 loginAttempts.add(new LoginAttempt(rs.getInt("ID"), rs.getString("service_num"), rs.getTimestamp("time_login"), rs.getBoolean("success")));
