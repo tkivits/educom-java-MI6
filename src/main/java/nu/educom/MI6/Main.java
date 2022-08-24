@@ -53,8 +53,10 @@ public class Main {
           }
           if(valid) {
             if (!nu.educom.MI6.Model.checkPassword(password, serviceNumber)) {
-              LoginAttempt.insertLoginAttempt(serviceNumber, 0);
               LocalDateTime lockoutTime = nu.educom.MI6.Model.getLockoutTime(serviceNumber);
+              if(LocalDateTime.now().isAfter(lockoutTime)) {
+                LoginAttempt.insertLoginAttempt(serviceNumber, 0);
+              }
               label.setText("ACCESS DENIED");
               labelTwo.setText("You can login at: " + lockoutTime);
               tfs.setText("");
