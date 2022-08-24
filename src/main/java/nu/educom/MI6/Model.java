@@ -21,6 +21,12 @@ public class Model {
         if (serviceNumber.length() > 3) {
             valid = false;
         }
+        if (valid = true) {
+            LocalDateTime lockoutTime = getLockoutTime(serviceNumber);
+            if (lockoutTime != null) {
+                valid = false;
+            }
+        }
         return valid;
     }
 
@@ -46,7 +52,7 @@ public class Model {
         }
     }
 
-    protected LocalDateTime getLockoutTime(String serviceNumber) {
+    protected static LocalDateTime getLockoutTime(String serviceNumber) {
         List<nu.educom.MI6.LoginAttempt> loginAttempts = nu.educom.MI6.LoginAttempt.getLoginAttempts(serviceNumber);
 
         int countAttempts = loginAttempts.size();
