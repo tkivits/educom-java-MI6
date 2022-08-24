@@ -21,12 +21,6 @@ public class Model {
         if (serviceNumber.length() > 3) {
             valid = false;
         }
-        if (valid = true) {
-            LocalDateTime lockoutTime = getLockoutTime(serviceNumber);
-            if (lockoutTime != null) {
-                valid = false;
-            }
-        }
         return valid;
     }
 

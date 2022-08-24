@@ -5,6 +5,7 @@ import nu.educom.MI6.LoginAttempt;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -16,7 +17,6 @@ public class Main {
   private static JTextField tfp = new JTextField();
   private static JButton submitButton = new JButton("Submit");
   private static List<String> isLoggedOn = new ArrayList<>();
-  private static List<String> isBlacklisted = new ArrayList<>();
 
   public static void showFrame() {
     tfs.setHorizontalAlignment(SwingConstants.CENTER);
@@ -46,24 +46,18 @@ public class Main {
           if (!nu.educom.MI6.Model.checkServiceNumber(serviceNumber)) {
             valid = false;
           }
-          if (valid && isBlacklisted.contains(serviceNumber)) {
-            valid = false;
-          }
           if (valid && isLoggedOn.contains(serviceNumber)) {
             label.setText("You are already logged in, agent:" + serviceNumber);
             valid = false;
           }
           if(valid) {
             if (!nu.educom.MI6.Model.checkPassword(password, serviceNumber)) {
-              validTwo = false;
-            }
-            if(!validTwo) {
+              LoginAttempt.insertLoginAttempt(serviceNumber, 0);
+              LocalDateTime lockoutTime = nu.educom.MI6.Model.getLockoutTime(serviceNumber);
               label.setText("ACCESS DENIED");
-              labelTwo.setText("");
+              labelTwo.setText("You can login at: " + lockoutTime);
               tfs.setText("");
               tfp.setText("");
-              LoginAttempt.insertLoginAttempt(serviceNumber, 0);
-              isBlacklisted.add(serviceNumber);
             } else {
               label.setText("WELCOME AGENT: " + serviceNumber);
               boolean hasLicense = nu.educom.MI6.Agent.getLicenseToKill(serviceNumber);
