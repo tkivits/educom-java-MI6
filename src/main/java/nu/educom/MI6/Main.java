@@ -7,6 +7,7 @@ import java.awt.*;
 import java.awt.event.*;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 public class Main {
@@ -66,6 +67,12 @@ public class Main {
               } else {
                 labelTwo.setText("You do not have a license to kill");
               }
+              List<LoginAttempt> loginAttempts = LoginAttempt.getLoginAttempts(serviceNumber);
+              JList<LoginAttempt> attemptList = new JList(loginAttempts.toArray());
+              attemptList.setLayoutOrientation(JList.VERTICAL);
+              attemptList.setVisibleRowCount(-1);
+              frame.setLayout(new GridLayout(6,1));
+              frame.add(attemptList);
               LoginAttempt.insertLoginAttempt(serviceNumber, 1);
               isLoggedOn.add(serviceNumber);
             }
