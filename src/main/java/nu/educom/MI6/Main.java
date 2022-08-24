@@ -5,6 +5,7 @@ import nu.educom.MI6.LoginAttempt;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
+import java.sql.Timestamp;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -63,11 +64,11 @@ public class Main {
               tfp.setText("");
             } else {
               label.setText("WELCOME AGENT: " + serviceNumber);
-              boolean hasLicense = nu.educom.MI6.Agent.getLicenseToKill(serviceNumber);
-              if(hasLicense) {
-                labelTwo.setText("You have a license to kill.");
-              } else {
+              Timestamp licenseToKill = nu.educom.MI6.Agent.getLicenseToKill(serviceNumber);
+              if(licenseToKill == null) {
                 labelTwo.setText("You do not have a license to kill");
+              } else {
+                labelTwo.setText("You have a license to kill until: " + licenseToKill);
               }
               List<LoginAttempt> loginAttempts = LoginAttempt.getLoginAttempts(serviceNumber);
               JList<LoginAttempt> attemptList = new JList(loginAttempts.toArray());
@@ -75,11 +76,13 @@ public class Main {
               attemptList.setVisibleRowCount(-1);
               frame.setLayout(new GridLayout(6,1));
               frame.add(attemptList);
+              tfs.setText("");
+              tfp.setText("");
               LoginAttempt.insertLoginAttempt(serviceNumber, 1);
               isLoggedOn.add(serviceNumber);
             }
           } else {
-            label.setText("ACCESS DENIED");
+            labelTwo.setText("");
             tfs.setText("");
             tfp.setText("");
           }

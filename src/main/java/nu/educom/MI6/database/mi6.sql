@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost:3306
--- Gegenereerd op: 22 aug 2022 om 12:21
+-- Gegenereerd op: 24 aug 2022 om 14:23
 -- Serverversie: 10.4.25-MariaDB
 -- PHP-versie: 8.1.7
 
@@ -32,7 +32,7 @@ CREATE TABLE `agents` (
   `service_num` varchar(100) COLLATE utf8mb4_unicode_ci NOT NULL,
   `secret_pass` varchar(500) COLLATE utf8mb4_unicode_ci NOT NULL,
   `active` tinyint(1) NOT NULL,
-  `license_to_kill` varchar(100) COLLATE utf8mb4_unicode_ci NOT NULL
+  `license_to_kill` datetime DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
@@ -40,12 +40,12 @@ CREATE TABLE `agents` (
 --
 
 INSERT INTO `agents` (`ID`, `service_num`, `secret_pass`, `active`, `license_to_kill`) VALUES
-(1, '002', 'For ThE Royal QUEEN', 1, 'yes'),
-(2, '005', 'FOR The RoYaL Queen', 1, 'void'),
-(3, '007', 'FoR THE royal queen', 1, 'yes'),
-(4, '030', 'FOR THE royal QuEeN', 1, 'no'),
-(5, '102', 'For THE ROYal QUeen', 1, 'no'),
-(6, '777', 'FOR tHe rOyAl qUeEn', 0, 'yes');
+(1, '002', 'For ThE Royal QUEEN', 1, '2026-08-19 16:13:50'),
+(2, '005', 'FOR The RoYaL Queen', 1, '2022-07-05 16:13:50'),
+(3, '007', 'FoR THE royal queen', 1, '2022-11-16 23:13:50'),
+(4, '030', 'FOR THE royal QuEeN', 1, NULL),
+(5, '102', 'For THE ROYal QUeen', 1, NULL),
+(6, '777', 'FOR tHe rOyAl qUeEn', 0, '2024-02-13 00:00:00');
 
 -- --------------------------------------------------------
 
@@ -54,7 +54,7 @@ INSERT INTO `agents` (`ID`, `service_num`, `secret_pass`, `active`, `license_to_
 --
 
 CREATE TABLE `login_attempts` (
-  `ID` int(11) NOT NULL,
+  `ID` int(3) NOT NULL,
   `service_num` varchar(100) COLLATE utf8mb4_unicode_ci NOT NULL,
   `time_login` datetime NOT NULL,
   `success` tinyint(1) NOT NULL
@@ -90,7 +90,7 @@ ALTER TABLE `agents`
 -- AUTO_INCREMENT voor een tabel `login_attempts`
 --
 ALTER TABLE `login_attempts`
-  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `ID` int(3) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=20;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
