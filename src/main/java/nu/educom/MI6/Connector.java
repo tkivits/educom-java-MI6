@@ -5,7 +5,7 @@ import java.sql.DriverManager;
 import java.sql.SQLException;
 
 public class Connector {
-    public static Connection createConn() {
+    public static Connection createConn() throws SQLException {
         Connection conn = null;
         try {
             // db parameters
@@ -14,7 +14,6 @@ public class Connector {
             String password  = "vmCyOY(0LnYN_K3-";
 
             conn = DriverManager.getConnection(url, user, password);
-
         } catch(SQLException e) {
             System.out.println(e.getMessage());
         }

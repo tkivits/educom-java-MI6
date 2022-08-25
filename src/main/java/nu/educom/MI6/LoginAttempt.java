@@ -22,27 +22,29 @@ public class LoginAttempt {
         return dateTime;
     }
 
-    public static void insertLoginAttempt(String serviceNumber, int success) {
+    public static void insertLoginAttempt(String serviceNumber, int success) throws SQLException {
         long now = System.currentTimeMillis();
         Timestamp dateTime = new Timestamp(now);
+        Connection conn = null;
 
         try {
-            Connection conn = nu.educom.MI6.Connector.createConn();
+            conn = nu.educom.MI6.Connector.createConn();
             PreparedStatement stmt = conn.prepareStatement("INSERT INTO login_attempts (service_num, time_login, success) VALUES( " + "?,?,?)");
             stmt.setString(1, serviceNumber);
             stmt.setTimestamp(2, dateTime);
             stmt.setInt(3, success);
             int updatedRowCount = stmt.executeUpdate();
-        } catch (SQLException e) {
-            e.printStackTrace();
+        } finally {
+            conn.close()
         }
     }
 
-    public static List<LoginAttempt> getLoginAttempts(String serviceNumber) {
+    public static List<LoginAttempt> getLoginAttempts(String serviceNumber) throws SQLException {
         List<LoginAttempt> loginAttempts = new ArrayList<>();
+        Connection conn = null;
 
         try {
-            Connection conn = nu.educom.MI6.Connector.createConn();
+            conn = nu.educom.MI6.Connector.createConn();
             PreparedStatement stmt = conn.prepareStatement("SELECT * FROM login_attempts WHERE service_num = ? AND ID > IFNULL((SELECT MAX(id) FROM login_attempts WHERE success = 1 AND service_num = ?), 0)");
             stmt.setString(1, serviceNumber);
             stmt.setString(2, serviceNumber);
@@ -50,10 +52,9 @@ public class LoginAttempt {
             while (rSet.next()) {
                 loginAttempts.add(new LoginAttempt(rSet.getInt("ID"), rSet.getString("service_num"), rSet.getTimestamp("time_login"), rSet.getBoolean("success")));
             }
-        } catch (SQLException e) {
-            e.printStackTrace();
+        } finally {
+            conn.close();
         }
-
         return loginAttempts;
     }
 }
