@@ -44,7 +44,7 @@ public class View {
                     if (serviceNumber.length() < 3) {
                         serviceNumber = nu.educom.MI6.Utility.leftPadWithZeros(serviceNumber);
                     }
-                    if (!nu.educom.MI6.Model.checkServiceNumber(serviceNumber)) {
+                    if (!AgentModel.checkServiceNumber(serviceNumber)) {
                         valid = false;
                     }
                     if (valid && isLoggedOn.contains(serviceNumber)) {
@@ -52,13 +52,13 @@ public class View {
                         valid = false;
                     }
                     if(valid) {
-                        if (!Model.checkPassword(password, serviceNumber)) {
-                            LocalDateTime lockoutTime = nu.educom.MI6.Model.getLockoutTime(serviceNumber);
+                        if (!LoginModel.checkPassword(password, serviceNumber)) {
+                            LocalDateTime lockoutTime = Model.getLockoutTime(serviceNumber);
                             if(LocalDateTime.now().isAfter(lockoutTime)) {
                                 try {
-                                    LoginAttempt.insertLoginAttempt(serviceNumber, 0);
-                                } catch (SQLException e) {
-                                    e.getMessage();
+                                    LoginModel.insertLoginAttempt(serviceNumber, 0);
+                                } catch (SQLException ex) {
+                                    ex.getMessage();
                                 }
                             }
                             label.setText("ACCESS DENIED");
@@ -69,17 +69,22 @@ public class View {
                             label.setText("WELCOME AGENT: " + serviceNumber);
                             Timestamp licenseToKill = null;
                             try {
-                                licenseToKill = Agent.getLicenseToKill(serviceNumber);
-                            } catch (SQLException e) {
-                                e.getMessage();
+                                licenseToKill = AgentModel.getLicenseToKill(serviceNumber);
+                            } catch (SQLException ex) {
+                                ex.getMessage();
                             }
                             if (licenseToKill == null) {
                                 labelTwo.setText("You do not have a license to kill");
                             } else {
                                 labelTwo.setText("You have a license to kill until: " + licenseToKill);
                             }
-                            List<LoginAttempt> loginAttempts = LoginAttempt.getLoginAttempts(serviceNumber);
-                            JList<LoginAttempt> attemptList = new JList(loginAttempts.toArray());
+                            List<LoginModel> loginAttempts = null;
+                            try {
+                                loginAttempts = LoginModel.getLoginAttempts(serviceNumber);
+                            } catch (SQLException ex) {
+                                ex.getMessage();
+                            }
+                            JList<LoginModel> attemptList = new JList(loginAttempts.toArray());
                             attemptList.setLayoutOrientation(JList.VERTICAL);
                             attemptList.setVisibleRowCount(-1);
                             frame.setLayout(new GridLayout(6, 1));
@@ -87,9 +92,9 @@ public class View {
                             tfs.setText("");
                             tfp.setText("");
                             try {
-                                LoginAttempt.insertLoginAttempt(serviceNumber, 1);
-                            } catch (SQLException e) {
-                                e.getMessage();
+                                LoginModel.insertLoginAttempt(serviceNumber, 1);
+                            } catch (SQLException ex) {
+                                ex.getMessage();
                             }
                             isLoggedOn.add(serviceNumber);
                         }

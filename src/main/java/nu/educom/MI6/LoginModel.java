@@ -4,14 +4,14 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
-public class LoginAttempt {
+public class LoginModel {
 
     private String serviceNumber;
     private Timestamp dateTime;
     private boolean success;
     private int id;
 
-    public LoginAttempt(int id, String serviceNumber, Timestamp dateTime, boolean success) {
+    public LoginModel(int id, String serviceNumber, Timestamp dateTime, boolean success) {
         this.id = id;
         this.serviceNumber = serviceNumber;
         this.dateTime = dateTime;
@@ -20,6 +20,28 @@ public class LoginAttempt {
 
     public Timestamp getDateTime() {
         return dateTime;
+    }
+
+    protected static boolean checkPassword(String password, String serviceNumber) {
+
+        String actualPassword = null;
+        int active = 0;
+
+        try {
+            ResultSet rSet = AgentModel.getAgentByID(serviceNumber);
+            rSet.next();
+            actualPassword = rSet.getString(3);
+            active = rSet.getInt(4);
+            System.out.println(active);
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
+
+        if (password.equals(actualPassword) && active == 1) {
+            return true;
+        } else {
+            return false;
+        }
     }
 
     public static void insertLoginAttempt(String serviceNumber, int success) throws SQLException {
@@ -35,12 +57,12 @@ public class LoginAttempt {
             stmt.setInt(3, success);
             int updatedRowCount = stmt.executeUpdate();
         } finally {
-            conn.close()
+            conn.close();
         }
     }
 
-    public static List<LoginAttempt> getLoginAttempts(String serviceNumber) throws SQLException {
-        List<LoginAttempt> loginAttempts = new ArrayList<>();
+    public static List<LoginModel> getLoginAttempts(String serviceNumber) throws SQLException {
+        List<LoginModel> loginAttempts = new ArrayList<>();
         Connection conn = null;
 
         try {
@@ -50,7 +72,7 @@ public class LoginAttempt {
             stmt.setString(2, serviceNumber);
             ResultSet rSet = stmt.executeQuery();
             while (rSet.next()) {
-                loginAttempts.add(new LoginAttempt(rSet.getInt("ID"), rSet.getString("service_num"), rSet.getTimestamp("time_login"), rSet.getBoolean("success")));
+                loginAttempts.add(new LoginModel(rSet.getInt("ID"), rSet.getString("service_num"), rSet.getTimestamp("time_login"), rSet.getBoolean("success")));
             }
         } finally {
             conn.close();

@@ -2,7 +2,23 @@ package nu.educom.MI6;
 
 import java.sql.*;
 
-public class Agent {
+public class AgentModel {
+    protected static boolean checkServiceNumber(String serviceNumber) {
+        boolean valid = true;
+        if (!nu.educom.MI6.Utility.isNumeric(serviceNumber)) {
+            valid = false;
+        }
+        if (!nu.educom.MI6.Utility.isInRange(serviceNumber, 1, 956)) {
+            valid = false;
+        }
+        if (serviceNumber.contains("+")) {
+            valid = false;
+        }
+        if (serviceNumber.length() > 3) {
+            valid = false;
+        }
+        return valid;
+    }
     public static ResultSet getAgentByID(String id) throws SQLException {
         ResultSet rSet = null;
         Connection conn = null;
