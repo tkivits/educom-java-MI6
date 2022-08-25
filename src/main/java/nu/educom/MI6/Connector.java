@@ -5,7 +5,7 @@ import java.sql.DriverManager;
 import java.sql.SQLException;
 
 public class Connector {
-    public static Connection createConn() throws SQLException {
+    public static Connection createConn() {
         Connection conn = null;
         try {
             // db parameters

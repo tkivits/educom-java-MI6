@@ -46,7 +46,12 @@ public class Model {
     }
 
     protected static LocalDateTime getLockoutTime(String serviceNumber) {
-        List<nu.educom.MI6.LoginAttempt> loginAttempts = nu.educom.MI6.LoginAttempt.getLoginAttempts(serviceNumber);
+        List<LoginAttempt> loginAttempts = null;
+        try {
+            loginAttempts = LoginAttempt.getLoginAttempts(serviceNumber);
+        } catch (SQLException e) {
+            e.getMessage();
+        }
 
         int countAttempts = loginAttempts.size();
         if (countAttempts == 0) {

@@ -5,6 +5,7 @@ import nu.educom.MI6.LoginAttempt;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
+import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -53,10 +54,14 @@ public class Main {
             valid = false;
           }
           if(valid) {
-            if (!nu.educom.MI6.Model.checkPassword(password, serviceNumber)) {
+            if (!Model.checkPassword(password, serviceNumber)) {
               LocalDateTime lockoutTime = nu.educom.MI6.Model.getLockoutTime(serviceNumber);
               if(LocalDateTime.now().isAfter(lockoutTime)) {
-                LoginAttempt.insertLoginAttempt(serviceNumber, 0);
+                try {
+                  LoginAttempt.insertLoginAttempt(serviceNumber, 0);
+                } catch (SQLException e) {
+                  e.getMessage()
+                }
               }
               label.setText("ACCESS DENIED");
               labelTwo.setText("You can login at: " + lockoutTime);
@@ -64,8 +69,13 @@ public class Main {
               tfp.setText("");
             } else {
               label.setText("WELCOME AGENT: " + serviceNumber);
-              Timestamp licenseToKill = nu.educom.MI6.Agent.getLicenseToKill(serviceNumber);
-              if(licenseToKill == null) {
+              Timestamp licenseToKill = null;
+              try {
+                licenseToKill = Agent.getLicenseToKill(serviceNumber);
+              } catch (SQLException e) {
+                e.getMessage();
+              }
+              if (licenseToKill == null) {
                 labelTwo.setText("You do not have a license to kill");
               } else {
                 labelTwo.setText("You have a license to kill until: " + licenseToKill);
@@ -74,11 +84,15 @@ public class Main {
               JList<LoginAttempt> attemptList = new JList(loginAttempts.toArray());
               attemptList.setLayoutOrientation(JList.VERTICAL);
               attemptList.setVisibleRowCount(-1);
-              frame.setLayout(new GridLayout(6,1));
+              frame.setLayout(new GridLayout(6, 1));
               frame.add(attemptList);
               tfs.setText("");
               tfp.setText("");
-              LoginAttempt.insertLoginAttempt(serviceNumber, 1);
+              try {
+                LoginAttempt.insertLoginAttempt(serviceNumber, 1);
+              } catch (SQLException e) {
+                e.getMessage();
+              }
               isLoggedOn.add(serviceNumber);
             }
           } else {
